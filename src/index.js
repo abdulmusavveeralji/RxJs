@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 
 const observable = new Observable((subscriber) => {
     subscriber.next('Hello Musavveer')
-    subscriber.error('Error!');
+    // subscriber.error('Error!');
     subscriber.next('Test')
     subscriber.complete()
     subscriber.next('Next')
@@ -24,7 +24,7 @@ console.log('before')
 const asyncObservable = new Observable((subscriber) => {
     const id = setInterval(() => {
         subscriber.next('Alji')
-        console.log('test')
+        console.log('leak')
     }, 1000)
     subscriber.complete()
     return () => {
@@ -33,7 +33,7 @@ const asyncObservable = new Observable((subscriber) => {
 
 });
 
-asyncObservable.subscribe({
+const subscription = asyncObservable.subscribe({
     next: (value) => {
         console.log(value);
     },
@@ -43,6 +43,10 @@ asyncObservable.subscribe({
     error: (err) => {
         console.error(err);
     }
-})
+});
+
+setTimeout(() => {
+    subscription.unsubscribe();
+}, 4000)
 
 console.log('after')
