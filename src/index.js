@@ -22,9 +22,15 @@ observable.subscribe({
 
 console.log('before')
 const asyncObservable = new Observable((subscriber) => {
-    setInterval(() => {
-        subscriber.next('Sufiyan')
+    const id = setInterval(() => {
+        subscriber.next('Alji')
+        console.log('test')
     }, 1000)
+    subscriber.complete()
+    return () => {
+        clearInterval(id)
+    }
+
 });
 
 asyncObservable.subscribe({
